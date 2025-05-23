@@ -1,5 +1,6 @@
 package CodeSquad.IssueTracker.user;
 
+import CodeSquad.IssueTracker.user.dto.DetailUserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,5 +30,9 @@ public class UserService {
 
     public void deleteById(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public Iterable<DetailUserDto> findAllUserDetails() {
+        return userRepository.findAllUserDetails();
     }
 }

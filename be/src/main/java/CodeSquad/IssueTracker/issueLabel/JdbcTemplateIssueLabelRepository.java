@@ -1,6 +1,9 @@
 package CodeSquad.IssueTracker.issueLabel;
 
+import CodeSquad.IssueTracker.issueLabel.dto.SummaryLabelDto;
 import CodeSquad.IssueTracker.issueLabel.dto.IssueLabelResponse;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -57,5 +60,24 @@ public class JdbcTemplateIssueLabelRepository implements IssueLabelRepository {
                         rs.getString("color")
                 )
         );
+    }
+
+    @Override
+    public List<SummaryLabelDto> findSummaryLabelByIssueId(Long issueId) {
+        String sql = """
+            SELECT 
+                l.label_id, 
+                l.name, 
+                l.color 
+            FROM issue_label il 
+            LEFT JOIN labels l ON il.label_id = l.label_id
+            WHERE il.issue_id = :issueId    
+        """;
+
+        return template.query(sql, Map.of("issueId", issueId), summaryLabelDtoRowMapper());
+    }
+
+    private RowMapper<SummaryLabelDto> summaryLabelDtoRowMapper(){
+        return BeanPropertyRowMapper.newInstance(SummaryLabelDto.class);
     }
 }

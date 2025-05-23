@@ -16,7 +16,7 @@ public class JWTUtil {
     private final String accessSecretKey;
     private final String refreshSecretKey;
     private static final String CLAIM_LOGIN_ID = "loginId";
-    private static final String CLAIM_IMG_URL = "imgUrl";
+    private static final String CLAIM_IMG_URL = "profileImageUrl";
 
     public JWTUtil(
             @Value("${spring.jwt.access-key}") String accessSecretKey,

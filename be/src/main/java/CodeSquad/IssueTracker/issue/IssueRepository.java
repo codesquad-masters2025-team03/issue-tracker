@@ -1,5 +1,7 @@
 package CodeSquad.IssueTracker.issue;
 
+import CodeSquad.IssueTracker.home.dto.IssueFilterRequestDto;
+import CodeSquad.IssueTracker.issue.dto.FilteredIssueDto;
 import CodeSquad.IssueTracker.issue.dto.IssueUpdateDto;
 
 import java.util.List;
@@ -14,4 +16,6 @@ public interface IssueRepository {
     Optional<Issue> findById(Long issueId);
 
     List<Issue> findAll();
+
+    List<FilteredIssueDto> findIssuesByFilter(IssueFilterRequestDto filterRequestDto);
 }

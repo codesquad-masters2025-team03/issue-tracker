@@ -5,11 +5,11 @@ const CloseButton = styled(GhostButton)`
   gap: 4px;
 `;
 
-export default function CloseIssueButton({ number }) {
+export default function CloseIssueButton({ number, onClick }) {
   const textLabel = `닫힌 이슈(${number})`;
 
   return (
-    <CloseButton>
+    <CloseButton onClick={onClick}>
       <svg
         width="16"
         height="16"

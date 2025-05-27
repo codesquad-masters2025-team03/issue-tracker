@@ -10,9 +10,13 @@ export function useApplyQueryParams() {
     const params = new URLSearchParams();
 
     Object.entries(filterObject).forEach(([key, value]) => {
+      /*
       if (value !== null) {
         params.set(key, value);
       }
+      */
+      if (value === null) return;
+      params.set(key, value);
     });
 
     navigate({ search: `?${params.toString()}` }, { replace: true });

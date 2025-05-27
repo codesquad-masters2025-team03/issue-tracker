@@ -29,7 +29,7 @@ public class LoginService {
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
         User targetUser = getUser(loginRequestDto.getLoginId());
         validatePassword(targetUser, loginRequestDto.getPassword());
-        return generateToken(targetUser, "프로필 사진 URL");
+        return generateToken(targetUser);
     }
 
     private User getUser(String loginId) {
@@ -43,8 +43,8 @@ public class LoginService {
         }
     }
 
-    private LoginResponseDto generateToken(User targetUser, String imgUrl) {
-        String accessToken = jwtUtil.createAccessToken(targetUser, imgUrl);
+    private LoginResponseDto generateToken(User targetUser) {
+        String accessToken = jwtUtil.createAccessToken(targetUser);
         String refreshToken = jwtUtil.createRefreshToken();
         return new LoginResponseDto(accessToken, refreshToken);
     }

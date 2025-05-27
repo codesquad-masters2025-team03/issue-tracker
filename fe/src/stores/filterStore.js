@@ -10,12 +10,13 @@ import { immer } from 'zustand/middleware/immer';
 const useFilterStore = create(
   immer((set) => ({
     selectedFilters: {
+      page: 1,
       assignee: null,
       label: null,
       milestone: null,
       author: null,
-      isOpen: true, // 열린/닫힌 여부
-      searchType: null, // 검색바 필터 옵션
+      commentedBy: null,
+      isOpen: true,
     },
 
     setFilter: (key, value) =>
@@ -23,9 +24,22 @@ const useFilterStore = create(
         state.selectedFilters[key] = value;
       }),
 
+    initFilter: (filters) =>
+      set((state) => {
+        state.selectedFilters = filters;
+      }),
+
     resetFilters: () =>
       set((state) => {
-        state.selectedFilters = {};
+        state.selectedFilters = {
+          page: 1,
+          assignee: null,
+          label: null,
+          milestone: null,
+          author: null,
+          commentedBy: null,
+          isOpen: true,
+        };
       }),
   })),
 );

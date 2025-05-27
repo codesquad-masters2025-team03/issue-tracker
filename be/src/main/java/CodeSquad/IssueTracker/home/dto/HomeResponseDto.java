@@ -1,19 +1,18 @@
 package CodeSquad.IssueTracker.home.dto;
 
-import CodeSquad.IssueTracker.issue.Issue;
+import CodeSquad.IssueTracker.issue.dto.FilteredIssueDto;
 import CodeSquad.IssueTracker.label.Label;
 import CodeSquad.IssueTracker.milestone.Milestone;
-import CodeSquad.IssueTracker.user.User;
+import CodeSquad.IssueTracker.user.dto.DetailUserDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 public class HomeResponseDto {
-    private Iterable<Issue> issues;
+    private Iterable<FilteredIssueDto> issues;
+    private Iterable<DetailUserDto> users;
     private Iterable<Label> labels;
     private Iterable<Milestone> milestones;
-    private Iterable<User> users;
+    private MetaData meta;
 }

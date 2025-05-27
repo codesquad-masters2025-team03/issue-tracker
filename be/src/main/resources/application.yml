@@ -64,6 +64,7 @@ spring:
         bucket: ${S3_BUCKET_NAME}
         url: ${S3_URL_NAME}
 
+
   sql:
     init:
       mode: always

@@ -1,7 +1,9 @@
 package CodeSquad.IssueTracker.issueAssignee;
 
+import CodeSquad.IssueTracker.user.dto.SummaryUserDto;
 import CodeSquad.IssueTracker.issueAssignee.dto.IssueAssigneeResponse;
-import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -57,5 +59,15 @@ public class JdbcTemplateAssigneeRepository implements IssueAssigneeRepository {
                         rs.getString("profile_image_url")
                 )
         );
+    }
+
+    @Override
+    public List<SummaryUserDto> findSummaryAssigneeByIssueId(Long issueId) {
+        String sql = "SELECT u.id, u.nick_name FROM issue_assignee ia LEFT JOIN users u ON ia.assignee_id = u.id WHERE ia.issue_id = :issueId ";
+        return template.query(sql, Map.of("issueId", issueId), summaryUserRowMapper());
+    }
+
+    private RowMapper<SummaryUserDto> summaryUserRowMapper(){
+        return BeanPropertyRowMapper.newInstance(SummaryUserDto.class);
     }
 }

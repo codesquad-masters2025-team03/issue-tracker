@@ -1,5 +1,8 @@
 package CodeSquad.IssueTracker.issueLabel.dto;
 
+import lombok.Data;
+
+@Data
 public class IssueLabelResponse {
     private Long id;
     private String name;

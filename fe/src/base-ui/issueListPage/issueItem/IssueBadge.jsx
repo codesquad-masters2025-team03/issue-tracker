@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
-export default function IssueBadge({ Isopen }) {
+export default function IssueBadge({ isOpen }) {
   return (
     <>
-      {Isopen ? (
+      {isOpen ? (
         <svg
           width="16"
           height="16"

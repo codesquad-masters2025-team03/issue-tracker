@@ -8,6 +8,9 @@ import styled from 'styled-components';
 import { FilterSearchField } from '@/base-ui/issueListPage/mainPageHeaderTap/FilteredTab';
 import { DropdownMenuTemplate } from '@/utils/dropDown/DropdownMenuTemplate';
 import useFilterStore from '@/stores/filterStore';
+import { useAuthStore } from '@/stores/authStore';
+import useQueryObject from '@/utils/queryParams/useQueryObject';
+import { useApplyQueryParams } from '@/utils/queryParams/useApplyQueryParams';
 
 const Container = styled.div`
   border: 1px solid ${({ theme }) => theme.border.default};
@@ -15,37 +18,38 @@ const Container = styled.div`
   border-radius: 12px;
   display: flex;
   align-items: center;
-  width: 560px;
+  min-width: 560px;
+  max-width: 760px;
   background-color: ${({ theme, $isActive }) =>
     $isActive ? theme.surface.strong : theme.surface.bold};
 `;
 
-function getMenuItems(filteredObj, setFilter) {
+function getMenuItems(filteredObj, userId, menuClickHandler) {
   const issueFilterItems = [
     {
       label: '열린 이슈',
-      isSelected: filteredObj.isOpen,
-      onClick: () => setFilter('isOpen', true),
+      isSelected: filteredObj.isOpen === 'true',
+      onClick: () => menuClickHandler('isOpen', true),
     },
     {
       label: '내가 작성한 이슈',
-      isSelected: false,
-      onClick: () => setFilter('isOpen', true), //백엔드와 api 협의 후 추가 구현 필요
+      isSelected: filteredObj.author === userId?.toString(),
+      onClick: () => menuClickHandler('author', userId), //백엔드와 api 협의 후 추가 구현 필요
     },
     {
       label: '나에게 할당된 이슈',
-      isSelected: false,
-      onClick: () => setFilter('isOpen', true), //백엔드와 api 협의 후 추가 구현 필요
+      isSelected: filteredObj.assignee === userId?.toString(),
+      onClick: () => menuClickHandler('assignee', userId), //백엔드와 api 협의 후 추가 구현 필요
     },
     {
       label: '내가 댓글을 남긴 이슈',
-      isSelected: false,
-      onClick: () => setFilter('isOpen', true), //백엔드와 api 협의 후 추가 구현 필요
+      isSelected: filteredObj.commentedBy === userId?.toString(),
+      onClick: () => menuClickHandler('commentedBy', userId), //백엔드와 api 협의 후 추가 구현 필요
     },
     {
       label: '닫힌 이슈',
-      isSelected: !filteredObj.isOpen,
-      onClick: () => setFilter('isOpen', false),
+      isSelected: filteredObj.isOpen === 'false',
+      onClick: () => menuClickHandler('isOpen', false),
     },
   ];
 
@@ -53,10 +57,20 @@ function getMenuItems(filteredObj, setFilter) {
 }
 
 export default function FilterBar() {
-  const filteredObj = useFilterStore((state) => state.selectedFilters);
+  const filteredObj = useQueryObject();
   const isActive = Object.keys(filteredObj).length > 0;
   const setFilter = useFilterStore((state) => state.setFilter);
-  const items = getMenuItems(filteredObj, setFilter);
+  const initFilter = useFilterStore((state) => state.initFilter);
+  const userId = useAuthStore((state) => state.loginId);
+  const applyQueryParams = useApplyQueryParams();
+  const items = getMenuItems(filteredObj, userId, menuClickHandler);
+
+  function menuClickHandler(key, value) {
+    initFilter(filteredObj);
+    setFilter(key, value);
+    const updated = useFilterStore.getState().selectedFilters;
+    applyQueryParams(updated);
+  }
 
   return (
     <Container $isActive={isActive}>

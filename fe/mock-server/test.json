@@ -1,0 +1,35 @@
+{
+  "success": true,
+  "message": "요청에 성공했습니다.",
+  "data": [
+    {
+      "id": 1,
+      "title": "로그인 오류",
+      "isOpen": true,
+      "author": { "id": 101, "nickname": "devchan" },
+      "assignees": [
+        { "id": 102, "nickname": "alice" },
+        { "id": 103, "nickname": "bob" }
+      ],
+      "labels": [
+        { "id": 1, "name": "bug", "color": "#ff0000" },
+        { "id": 2, "name": "urgent", "color": "#ffcc00" }
+      ],
+      "milestone": { "id": 5, "name": "v1.0 릴리즈" },
+      "createdAt": "2025-05-12T09:00:00Z"
+    },
+    {
+      "id": 3,
+      "title": "서버 응답 지연 문제",
+      "isOpen": false,
+      "author": { "id": 103, "nickname": "bob" },
+      "assignees": [{ "id": 101, "nickname": "devchan" }],
+      "labels": [
+        { "id": 1, "name": "bug", "color": "#ff0000" },
+        { "id": 4, "name": "performance", "color": "#0000ff" }
+      ],
+      "milestone": { "id": 7, "name": "v0.9 릴리즈" },
+      "createdAt": "2025-04-20T08:00:00Z"
+    }
+  ]
+}

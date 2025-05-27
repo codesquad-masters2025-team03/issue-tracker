@@ -29,7 +29,7 @@ public class MilestoneService {
         milestoneRepository.deleteById(id);
     }
 
-    public List<MilestoneResponse> findMilestoneResponsesByIssueId(Long issueId) {
+    public MilestoneResponse findMilestoneResponsesByIssueId(Long issueId) {
         return milestoneRepository.findMilestoneResponsesByIssueId(issueId);
     }
 }

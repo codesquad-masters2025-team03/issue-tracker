@@ -1,6 +1,9 @@
 package CodeSquad.IssueTracker.issueLabel;
 
+import CodeSquad.IssueTracker.issueLabel.dto.SummaryLabelDto;
 import CodeSquad.IssueTracker.issueLabel.dto.IssueLabelResponse;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -20,7 +23,7 @@ public class JdbcTemplateIssueLabelRepository implements IssueLabelRepository {
     public JdbcTemplateIssueLabelRepository(DataSource dataSource) {
         this.template = new NamedParameterJdbcTemplate(dataSource);
         this.jdbcInsert = new SimpleJdbcInsert(dataSource)
-                .withTableName("issue_labels")
+                .withTableName("issue_label")
                 .usingGeneratedKeyColumns("issue_label_id");
     }
 
@@ -33,21 +36,22 @@ public class JdbcTemplateIssueLabelRepository implements IssueLabelRepository {
 
     @Override
     public void deleteByIssueId(Long issueId) {
-        String sql = "DELETE FROM issue_labels WHERE issue_id = :issueId";
+        String sql = "DELETE FROM issue_label WHERE issue_id = :issueId";
         template.update(sql, Map.of("issueId", issueId));
     }
 
     @Override
     public List<IssueLabelResponse> returnedIssueLabelResponsesByIssueId(Long issueId) {
         String sql = """
-        SELECT
-            l.id AS label_id,
+        
+                SELECT
+            l.label_id AS label_id,
             l.name AS name,
             l.color AS color
-        FROM issue_labels il
-        JOIN labels l ON il.label_id = l.id
-        WHERE il.issue_id = :issueId    
-                """;
+        FROM issue_label il
+        JOIN labels l ON il.label_id = l.label_id
+        WHERE il.issue_id = :issueId
+        """;
 
         return template.query(sql, Map.of("issueId", issueId), (rs, rowNum) ->
                 new IssueLabelResponse(
@@ -56,5 +60,24 @@ public class JdbcTemplateIssueLabelRepository implements IssueLabelRepository {
                         rs.getString("color")
                 )
         );
+    }
+
+    @Override
+    public List<SummaryLabelDto> findSummaryLabelByIssueId(Long issueId) {
+        String sql = """
+            SELECT 
+                l.label_id, 
+                l.name, 
+                l.color 
+            FROM issue_label il 
+            LEFT JOIN labels l ON il.label_id = l.label_id
+            WHERE il.issue_id = :issueId    
+        """;
+
+        return template.query(sql, Map.of("issueId", issueId), summaryLabelDtoRowMapper());
+    }
+
+    private RowMapper<SummaryLabelDto> summaryLabelDtoRowMapper(){
+        return BeanPropertyRowMapper.newInstance(SummaryLabelDto.class);
     }
 }

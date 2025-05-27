@@ -4,12 +4,11 @@ import { immer } from 'zustand/middleware/immer';
 const useIssuesStore = create(
   immer((set) => ({
     issues: [],
-    issueSummary: { openedIssueId: [], closedIssueId: [], openIssueNumber: 0, closeIssueNumber: 0 },
+    metaData: {},
     setIssues: (issues) =>
       set((state) => {
         if (!issues) return;
         state.issues = issues;
-        state.parseIssue();
       }),
 
     addIssue: (issue) =>
@@ -36,22 +35,11 @@ const useIssuesStore = create(
         state.issues = state.issues.filter((i) => i.id !== id);
       }),
 
-    parseIssue: () =>
+    // -> 오픈 ID 관리 로직 수정 필요
+    // 분기 처리도 현재 필터의 상태 (isOpen 의 쿼리 파람 상태)에 돤련된 id 를 추적 해야한다.
+    setMetaData: (metaData) =>
       set((state) => {
-        const summary = state.issues.reduce(
-          (acc, { id, isOpen }) => {
-            if (isOpen) {
-              acc.openedIssueId.push(id);
-              acc.openIssueNumber += 1;
-            } else {
-              acc.closedIssueId.push(id);
-              acc.closeIssueNumber += 1;
-            }
-            return acc;
-          },
-          { openedIssueId: [], closedIssueId: [], openIssueNumber: 0, closeIssueNumber: 0 },
-        );
-        state.issueSummary = summary;
+        state.metaData = metaData;
       }),
   })),
 );

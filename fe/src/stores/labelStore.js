@@ -1,18 +1,17 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { LABELS_URL } from '@/api/labels';
 
 const useLabelStore = create(
   immer((set) => ({
     labels: [],
-    isLoading: false,
-    error: null,
 
     setLabels: (labels) =>
       set((state) => {
         state.labels = labels;
       }),
+
     // 나중에 보완하기. 커스텀 훅의 fetchFn 함수 받아서 사용하기, 커스텀훅의 response받아서 사용하기
+    //일단 이 메서드 쓰지마라.
     fetchLabels: async (fetchFn, state) => {
       set((state) => {
         state.isLoading = true;

@@ -1,5 +1,8 @@
 package CodeSquad.IssueTracker.issueAssignee.dto;
 
+import lombok.Data;
+
+@Data
 public class IssueAssigneeResponse {
     private Long id;
     private String nickname;

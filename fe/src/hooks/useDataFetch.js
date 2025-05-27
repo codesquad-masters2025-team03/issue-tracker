@@ -15,6 +15,7 @@ export default function useDataFetch({ fetchType }) {
   const setError = useErrorStore((state) => state.setError);
   const [response, setResponse] = useState(null);
 
+  //응답 자체를 reponse 상태로 업데이트!
   const fetchData = useCallback(
     async (apiUrl, optionObj = null) => {
       setIsLoading(true);

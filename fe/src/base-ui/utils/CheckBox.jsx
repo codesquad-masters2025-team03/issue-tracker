@@ -14,6 +14,9 @@ const Container = styled.button`
   height: 16px;
   border-radius: 1.6px;
   align-items: center;
+  &:hover {
+    background-color: ${({ theme }) => theme.surface.bold};
+  }
 `;
 
 const EmptyCheckBox = styled.div`

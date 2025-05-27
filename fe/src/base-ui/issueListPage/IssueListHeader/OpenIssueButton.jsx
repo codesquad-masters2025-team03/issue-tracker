@@ -5,11 +5,11 @@ const OpenButton = styled(GhostButton)`
   gap: 4px;
 `;
 
-export default function OpenIssueButton({ number }) {
+export default function OpenIssueButton({ number, onClick }) {
   const textLabel = `열린 이슈(${number})`;
 
   return (
-    <OpenButton>
+    <OpenButton onClick={onClick}>
       <svg
         width="16"
         height="16"

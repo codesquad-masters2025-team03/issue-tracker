@@ -46,12 +46,11 @@ class LoginServiceTest {
                 .id(1L)
                 .loginId(loginId)
                 .password(password)
-                .emailId("testUser@example.com")
                 .nickName("testUser")
                 .build();
 
         Mockito.when(userRepository.findByLoginId(loginId)).thenReturn(Optional.of(mockUser));
-        Mockito.when(jwtUtil.createAccessToken(Mockito.any(User.class), Mockito.anyString())).thenReturn(accessToken);
+        Mockito.when(jwtUtil.createAccessToken(Mockito.any(User.class))).thenReturn(accessToken);
         Mockito.when(jwtUtil.createRefreshToken()).thenReturn(refreshToken);
 
         // when
@@ -76,7 +75,6 @@ class LoginServiceTest {
                 .id(1L)
                 .loginId(loginId)
                 .password(correctPassword)
-                .emailId("testUser@example.com")
                 .nickName("testUser")
                 .build();
 

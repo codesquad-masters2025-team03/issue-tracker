@@ -20,6 +20,9 @@ public class Comment {
     private LocalDateTime lastModifiedAt;
     private String imageUrl;
 
+    public Comment() {
+    }
+
     public Comment(Long commentId, Long issueId, String content, Long authorId, LocalDateTime lastModifiedAt, String imageUrl) {
         this.commentId = commentId;
         this.issueId = issueId;

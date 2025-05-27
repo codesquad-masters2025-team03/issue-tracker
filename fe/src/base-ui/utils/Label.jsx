@@ -35,8 +35,8 @@ function generateLabelStyle(hexColor) {
   return { textColor, backgroundColor, borderColor };
 }
 
-export default function Label({ hexColor, labelTitle }) {
-  const { textColor, backgroundColor, borderColor } = generateLabelStyle(hexColor);
+export default function Label({ color, labelTitle }) {
+  const { textColor, backgroundColor, borderColor } = generateLabelStyle(color);
 
   return (
     <LabelWrapper

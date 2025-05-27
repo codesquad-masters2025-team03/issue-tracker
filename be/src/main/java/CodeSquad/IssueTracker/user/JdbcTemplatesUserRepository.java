@@ -1,5 +1,6 @@
 package CodeSquad.IssueTracker.user;
 
+import CodeSquad.IssueTracker.user.dto.DetailUserDto;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -57,6 +58,12 @@ public class JdbcTemplatesUserRepository implements UserRepository{
     }
 
     @Override
+    public List<DetailUserDto> findAllUserDetails() {
+        String sql = "SELECT id, nick_name, profile_image_url FROM users";
+        return template.query(sql, detailUserDtoRowMapper());
+    }
+
+    @Override
     public void deleteById(Long id) {
         String sql = "DELETE FROM users WHERE id = :id";
         Map<String, Object> param = Map.of("id", id);
@@ -65,5 +72,9 @@ public class JdbcTemplatesUserRepository implements UserRepository{
 
     private RowMapper<User> userRowMapper(){
         return BeanPropertyRowMapper.newInstance(User.class);
+    }
+
+    private RowMapper<DetailUserDto> detailUserDtoRowMapper(){
+        return BeanPropertyRowMapper.newInstance(DetailUserDto.class);
     }
 }

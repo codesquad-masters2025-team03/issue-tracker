@@ -45,10 +45,10 @@ export default function LoginPage() {
   }
 
   useEffect(() => {
-    if (response && response.accessToken) {
-      const token = response.accessToken;
-      const { userId, imgUrl } = tokenDecoder(token);
-      setUser(userId, imgUrl, token);
+    if (response && response.data.accessToken) {
+      const token = response.data.accessToken;
+      const { loginId, imgUrl } = tokenDecoder(token);
+      setUser(loginId, imgUrl, token);
       localStorage.setItem('token', token);
       navigate('/');
     }

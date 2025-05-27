@@ -16,7 +16,6 @@ import java.util.List;
 public class IssueAssigneeService {
 
     private final IssueAssigneeRepository issueAssigneeRepository;
-    private final UserService userService;
 
     @Transactional
     public void assignAssignees(Long issueId, List<Long> assigneeIds) {

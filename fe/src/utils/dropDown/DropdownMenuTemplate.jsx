@@ -71,22 +71,25 @@ export function DropdownMenuTemplate({
       </S.TriggerButton>
 
       {open && (
-        <S.Menu $width={menuWidth}>
-          {label && <S.Label>{label}</S.Label>}
-          {label && <S.Separator />}
-          {items.map((item, idx) => (
-            <div key={idx}>
-              <S.Item onClick={item.onClick} disabled={item.disabled}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  {item.leftSlot}
-                  {item.label}
-                </div>
-                {item.isSelected ? <CheckedOnCircle /> : <CheckedOffCircle />}
-              </S.Item>
-              {idx < items.length - 1 && <S.Separator />}
-            </div>
-          ))}
-        </S.Menu>
+        <>
+          <S.Menu $width={menuWidth}>
+            {label && <S.Label>{label}</S.Label>}
+            {label && <S.Separator />}
+            {items.map((item, idx) => (
+              <div key={idx}>
+                <S.Item onClick={item.onClick} disabled={item.disabled}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    {item.leftSlot}
+                    {item.label}
+                  </div>
+                  {item.isSelected ? <CheckedOnCircle /> : <CheckedOffCircle />}
+                </S.Item>
+                {idx < items.length - 1 && <S.Separator />}
+              </div>
+            ))}
+          </S.Menu>
+          <S.Overlay onClick={() => setOpen(false)} />
+        </>
       )}
     </S.Container>
   );

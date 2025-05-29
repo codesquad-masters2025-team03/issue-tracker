@@ -5,6 +5,10 @@ spring:
   jwt:
     access-key: 3Three-Squad-AccessKey-1234567890-abcdefg
     refresh-key: 3Three-Squad-RefreshKey-1234567890-hijklmn
+  github:
+    client-id: ${OAUTH_CLIENT_ID}
+    client-secret: ${OAUTH_CLIENT_SECRET}
+    redirect-uri: ${OAUTH_REDIRECT_URI}
   datasource:
     url: jdbc:mysql://localhost:3306/issue_tracker?serverTimezone=Asia/Seoul
     username: JOHNNIE
@@ -52,6 +56,11 @@ spring:
   jwt:
     access-key: ${JWT_ACCESS_KEY}
     refresh-key: ${JWT_REFRESH_KEY}
+
+  github:
+    client-id: ${OAUTH_CLIENT_ID}
+    client-secret: ${OAUTH_CLIENT_SECRET}
+    redirect-uri: ${OAUTH_REDIRECT_URI}
 
   cloud:
     aws:

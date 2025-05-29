@@ -31,8 +31,8 @@ public class JdbcTemplatesUserRepository implements UserRepository{
     public Optional<User> findByLoginId(String loginId) {
         String sql = "SELECT * FROM users WHERE login_Id = :loginId";
         Map<String, Object> param = Map.of("loginId", loginId);
-        User user = template.queryForObject(sql, param, userRowMapper());
-        return Optional.ofNullable(user);
+        List<User> user = template.query(sql, param, userRowMapper());
+        return user.stream().findFirst();
     }
 
     @Override

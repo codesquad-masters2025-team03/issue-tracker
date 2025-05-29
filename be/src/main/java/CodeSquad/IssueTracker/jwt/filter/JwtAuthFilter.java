@@ -29,7 +29,7 @@ public class JwtAuthFilter implements Filter {
         String requestURI =  httpRequest.getRequestURI();
 
         // 특정 URL 경로는 필터를 적용하지 않도록 처리
-        if (requestURI.equals("/login") || requestURI.equals("/signup")) {
+        if (requestURI.equals("/login") || requestURI.equals("/signup") || requestURI.equals("/oauth/callback/github")) {
             filterChain.doFilter(httpRequest, httpResponse);
             return;
         }

@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users (
                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
                        login_id VARCHAR(255) NOT NULL,
-                       password VARCHAR(255) NOT NULL,
+                       password VARCHAR(255),
                        nick_name VARCHAR(255) NOT NULL,
                        profile_image_url VARCHAR(512)
 );

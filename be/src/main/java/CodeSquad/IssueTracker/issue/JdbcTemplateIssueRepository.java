@@ -3,6 +3,8 @@ package CodeSquad.IssueTracker.issue;
 
 import CodeSquad.IssueTracker.home.dto.IssueFilterCondition;
 import CodeSquad.IssueTracker.issue.dto.FilteredIssueDto;
+import CodeSquad.IssueTracker.issue.dto.GroupedCountDto;
+import CodeSquad.IssueTracker.issue.dto.IssueStatusUpdateRequest;
 import CodeSquad.IssueTracker.issue.dto.IssueUpdateDto;
 import CodeSquad.IssueTracker.milestone.dto.SummaryMilestoneDto;
 import CodeSquad.IssueTracker.user.dto.SummaryUserDto;
@@ -45,17 +47,46 @@ public class JdbcTemplateIssueRepository implements IssueRepository {
     }
 
     @Override
-    public void update(Long issueId, IssueUpdateDto updateParam) {
-        String sql = "UPDATE issues SET title = :title, content = :content, is_Open = :isOpen, last_modified_at = :lastModifiedAt, milestone_Id = :milestoneId WHERE issue_Id = :id";
-        SqlParameterSource param = new MapSqlParameterSource()
-                .addValue("title", updateParam.getTitle())
-                .addValue("content", updateParam.getContent())
-                .addValue("isOpen", updateParam.getIsOpen())
-                .addValue("lastModifiedAt", LocalDateTime.now())
-                .addValue("milestoneId", updateParam.getMilestoneId())
-                .addValue("id", issueId);
-        template.update(sql, param);
+    public void update(Long issueId, IssueUpdateDto updateParam, String issueFileUrl) {
+        StringBuilder sql = new StringBuilder("UPDATE issues SET ");
+        MapSqlParameterSource param = new MapSqlParameterSource();
+        boolean first = true;
+
+        if (updateParam.getTitle() != null) {
+            sql.append(first ? "" : ", ").append("title = :title");
+            param.addValue("title", updateParam.getTitle());
+            first = false;
+        }
+        if (updateParam.getContent() != null) {
+            sql.append(first ? "" : ", ").append("content = :content");
+            param.addValue("content", updateParam.getContent());
+            first = false;
+        }
+        if (updateParam.getIsOpen() != null) {
+            sql.append(first ? "" : ", ").append("is_open = :isOpen");
+            param.addValue("isOpen", updateParam.getIsOpen());
+            first = false;
+        }
+        if (updateParam.getMilestoneId() != null) {
+            sql.append(first ? "" : ", ").append("milestone_id = :milestoneId");
+            param.addValue("milestoneId", updateParam.getMilestoneId());
+            first = false;
+        }
+        if (issueFileUrl != null) {
+            sql.append(first ? "" : ", ").append("issue_file_url = :issueFileUrl");
+            param.addValue("issueFileUrl", issueFileUrl);
+            first = false;
+        }
+
+        sql.append(first ? "" : ", ").append("last_modified_at = :lastModifiedAt");
+        param.addValue("lastModifiedAt", LocalDateTime.now());
+
+        sql.append(" WHERE issue_id = :id");
+        param.addValue("id", issueId);
+
+        template.update(sql.toString(), param);
     }
+
 
     @Override
     public Optional<Issue> findById(Long issueId) {
@@ -76,7 +107,7 @@ public class JdbcTemplateIssueRepository implements IssueRepository {
         IssueFilterQueryBuilder queryBuilder = new IssueFilterQueryBuilder(condition.getIsOpen(), condition);
         String sql = """
             SELECT DISTINCT
-            i.issue_id, i.title, i.is_open, i.author_id, u.nick_name, i.milestone_id, m.name AS milestone_name, i.last_modified_at
+            i.issue_id, i.title, i.is_open, i.author_id, u.nick_name, u.profile_image_url, i.milestone_id, m.name AS milestone_name, i.last_modified_at
             FROM issues i
             LEFT JOIN milestones m ON i.milestone_id = m.milestone_id
             LEFT JOIN users u ON i.author_id = u.id
@@ -96,7 +127,7 @@ public class JdbcTemplateIssueRepository implements IssueRepository {
             dto.setIssueId(rs.getLong("issue_id"));
             dto.setTitle(rs.getString("title"));
             dto.setIsOpen(rs.getBoolean("is_open"));
-            dto.setAuthor(new SummaryUserDto(rs.getLong("author_id"), rs.getString("nick_name")));
+            dto.setAuthor(new SummaryUserDto(rs.getLong("author_id"), rs.getString("nick_name"), rs.getString("profile_image_url")));
             dto.setMilestone(new SummaryMilestoneDto(rs.getLong("milestone_id"), rs.getString("milestone_name")));
             dto.setLastModifiedAt(rs.getTimestamp("last_modified_at").toLocalDateTime());
             return dto;
@@ -121,6 +152,66 @@ public class JdbcTemplateIssueRepository implements IssueRepository {
 
         return template.queryForObject(finalSql, queryBuilder.getParams(), Integer.class);
     }
+
+    @Override
+    public void updateIsOpen(IssueStatusUpdateRequest condition) {
+        String sql = """
+                UPDATE issues SET is_open = :isOpen 
+                WHERE issue_id IN (:issueIds)
+                """;
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        List<Long> issueIds = condition.getIssueIds();
+        params.addValue("issueIds", issueIds);
+
+        boolean isOpen = condition.isOpen();
+        params.addValue("isOpen", isOpen);
+
+        template.update(sql, params);
+    }
+
+    @Override
+    public void deleteById(Long issueId) {
+        String sql = "DELETE FROM issues WHERE issue_id = :issueId";
+        Map<String, Object> param = Map.of("issueId", issueId);
+        template.update(sql, param);
+    }
+
+    @Override
+    public void clearMilestoneFromIssues(Long milestoneId) {
+        String sql = "UPDATE issues SET milestone_id = null WHERE milestone_id = :milestoneId";
+        template.update(sql, Map.of("milestoneId", milestoneId));
+    }
+
+    @Override
+    public GroupedCountDto countGroupedIssues(IssueFilterCondition condition) {
+        String baseSql = """
+        SELECT
+            COUNT(DISTINCT CASE WHEN i.is_open = true THEN i.issue_id END) AS open_count,
+            COUNT(DISTINCT CASE WHEN i.is_open = false THEN i.issue_id END) AS closed_count,
+            COUNT(DISTINCT i.issue_id) AS total_count
+        FROM issues i
+        LEFT JOIN milestones m ON i.milestone_id = m.milestone_id
+        LEFT JOIN users u ON i.author_id = u.id
+        LEFT JOIN issue_assignee ia ON i.issue_id = ia.issue_id
+        LEFT JOIN issue_label il ON i.issue_id = il.issue_id
+        LEFT JOIN comments c ON i.issue_id = c.issue_id
+    """;
+
+        IssueFilterQueryBuilder queryBuilder = new IssueFilterQueryBuilder(null, condition); // isOpen은 전체 조회니까 null
+        String whereClause = queryBuilder.getWhereClause().toString();
+
+        String finalSql = baseSql + whereClause;
+
+        return template.queryForObject(finalSql, queryBuilder.getParams(), (rs, rowNum) ->
+                new GroupedCountDto(
+                        rs.getInt("open_count"),
+                        rs.getInt("closed_count"),
+                        rs.getInt("total_count")
+                )
+        );
+    }
+
 
     private RowMapper<Issue> issueRowMapper() {
         return BeanPropertyRowMapper.newInstance(Issue.class);

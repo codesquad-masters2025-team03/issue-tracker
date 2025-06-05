@@ -10,6 +10,7 @@ public enum Error {
     NO_USER_EXCEPTION("없는 유저이거나 탈퇴한 유저 입니다",HttpStatus.NOT_FOUND),
     NO_AUTHORITY_EXCEPTION("권한이 없습니다",HttpStatus.UNAUTHORIZED),
     PASSWORD_MISMATCH_EXCEPTION("비밀번호가 일치하지 않습니다",HttpStatus.UNAUTHORIZED),
+    NOT_FOUND_EXCEPTION("존재하지 않는 데이터를 요청했습니다.",HttpStatus.NOT_FOUND),
     CUSTOM_MESSAGE_EXCEPTION("%s ",HttpStatus.UNAUTHORIZED);
 
     @Getter

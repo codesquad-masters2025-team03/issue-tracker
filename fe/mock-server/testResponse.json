@@ -15,7 +15,7 @@
       "authorProfileUrl": "https://dummy.local/profile/devchan.png"
     },
     "assignees": [
-      { "id": 2, "nickname": "홍길동", "profileImageUrl": "https://dummy.local/profile/user1.png" }
+      { "id": 2, "nickName": "홍길동", "profileImageUrl": "https://dummy.local/profile/user1.png" }
     ],
     "labels": [
       { "labelId": 1, "name": "bug", "color": "#FF0000", "description": "" },

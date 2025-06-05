@@ -1,11 +1,11 @@
 package CodeSquad.IssueTracker.label;
 
-import CodeSquad.IssueTracker.label.dto.CreateLabelRequest;
+import CodeSquad.IssueTracker.issueLabel.IssueLabelService;
 import CodeSquad.IssueTracker.label.dto.LabelUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -13,6 +13,7 @@ import java.util.List;
 public class LabelService {
 
     private final LabelRepository labelRepository;
+    private final IssueLabelService labelService;
 
     public Label save(Label label) {
         return labelRepository.save(label);
@@ -30,9 +31,9 @@ public class LabelService {
         labelRepository.update(labelId, updateParam);
     }
 
+    @Transactional
     public void deleteById(Long labelId) {
+        labelService.deleteByLabelId(labelId);
         labelRepository.deleteById(labelId);
     }
-
-
 }

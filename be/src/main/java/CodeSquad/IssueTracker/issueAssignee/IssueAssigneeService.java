@@ -31,10 +31,12 @@ public class IssueAssigneeService {
         }
     }
 
-    @Transactional
     public List<IssueAssigneeResponse> findAssigneeResponsesByIssueId(Long issueId) {
         return issueAssigneeRepository.findAssigneeResponsesByIssueId(issueId);
     }
 
-
+    @Transactional
+    public void unassignAssignee(Long issueId) {
+        issueAssigneeRepository.deleteByIssueId(issueId);
+    }
 }

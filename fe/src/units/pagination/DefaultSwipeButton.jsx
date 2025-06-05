@@ -3,6 +3,7 @@ import useQueryParams from '@/utils/queryParams/useQueryParams';
 import { NextButton, PrevButton } from '@/base-ui/pagination/swipeButton';
 import { useSearchParams } from 'react-router-dom';
 import { typography } from '@/styles/foundation';
+import useIssuesStore from '@/stores/issuesStore';
 
 const Wrapper = styled.div`
   display: flex;
@@ -17,6 +18,7 @@ const PageLabel = styled.div`
 
 export default function DefaultSwipeButton() {
   const [searchParams] = useSearchParams();
+  const metaData = useIssuesStore((s) => s.metaData);
   const currentPage = searchParams.get('page');
   const editParams = useQueryParams();
 
@@ -29,9 +31,9 @@ export default function DefaultSwipeButton() {
 
   return (
     <Wrapper>
-      <PrevButton onClick={PrevSwipeHandler} />
+      <PrevButton onClick={PrevSwipeHandler} disabled={Number(currentPage) === 1} />
       <PageLabel>{currentPage}</PageLabel>
-      <NextButton onClick={NextSwipeHandler} />
+      <NextButton onClick={NextSwipeHandler} disabled={Number(currentPage) === metaData.maxPage} />
     </Wrapper>
   );
 }

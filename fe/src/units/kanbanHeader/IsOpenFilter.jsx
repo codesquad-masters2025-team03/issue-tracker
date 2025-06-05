@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import useIssuesStore from '@/stores/issuesStore';
 import { useApplyQueryParams } from '@/utils/queryParams/useApplyQueryParams';
 import useQueryObject from '@/utils/queryParams/useQueryObject';
+import { useSearchParams } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -14,6 +15,8 @@ export default function IsOpenFilter() {
   const metaData = useIssuesStore((state) => state.metaData);
   const queryObject = useQueryObject();
   const applyQueryParams = useApplyQueryParams();
+  const [searchParams] = useSearchParams();
+  const isOpen = searchParams.get('isOpen') === 'true' ? true : false;
 
   function buttonHandler(isOpen) {
     queryObject.page = 1;
@@ -23,8 +26,16 @@ export default function IsOpenFilter() {
 
   return (
     <Container>
-      <OpenIssueButton onClick={() => buttonHandler(true)} number={metaData.openIssueNumber} />
-      <CloseIssueButton onClick={() => buttonHandler(false)} number={metaData.closeIssueNumber} />
+      <OpenIssueButton
+        isOpen={isOpen}
+        onClick={() => buttonHandler(true)}
+        number={metaData.openIssueNumber}
+      />
+      <CloseIssueButton
+        isOpen={isOpen}
+        onClick={() => buttonHandler(false)}
+        number={metaData.closeIssueNumber}
+      />
     </Container>
   );
 }

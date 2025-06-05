@@ -29,7 +29,7 @@ const FilterText = styled.span`
 export function FilterSearchField({ selectedFilters }) {
   const arr = Object.entries(selectedFilters).reduce((acc, [key, value], idx, arr) => {
     if (value === null) return acc;
-    const isLast = idx === arr.length - 1;
+    const isLast = idx === arr?.length - 1;
     acc += `${key}:${value}${isLast ? '' : ', '}`;
     return acc;
   }, '');

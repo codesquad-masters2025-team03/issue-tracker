@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.List;
 
-import static CodeSquad.IssueTracker.global.message.SuccessMessage.ISSUE_DETAIL_FETCH_SUCCESS;
+import static CodeSquad.IssueTracker.global.message.SuccessMessage.*;
 
 @Slf4j
 @RestController
@@ -27,27 +26,34 @@ public class IssueController {
     private final IssueService issueService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public IssueDetailResponse createIssue(
+    public BaseResponseDto<IssueDetailResponse> createIssue(
             @RequestPart("data") @Validated IssueCreateRequest request,
             @RequestPart(value = "files", required = false) List<MultipartFile> files,
             HttpServletRequest httpRequest
     ) throws IOException {
         String loginId = httpRequest.getAttribute("loginId").toString();
         log.info("Creating new issue with login id {}", loginId);
-        return issueService.createIssue(request, files, loginId);
+        return BaseResponseDto.success(ISSUE_CREATE_SUCCESS.getMessage(), issueService.createIssue(request,files,loginId));
     }
 
 
     @GetMapping("/{issueId}")
     public BaseResponseDto<IssueDetailResponse> getIssueDetailInfo(@PathVariable Long issueId) {
-        Issue byIdIssue = issueService.findById(issueId).get();
-        return BaseResponseDto.success(ISSUE_DETAIL_FETCH_SUCCESS.getMessage(), issueService.toDetailResponse(byIdIssue));
+        Issue issue = issueService.findById(issueId);
+        return BaseResponseDto.success(ISSUE_DETAIL_FETCH_SUCCESS.getMessage(), issueService.toDetailResponse(issue));
     }
 
     @PatchMapping("/{issueId}")
-    public IssueDetailResponse updateIssue(@PathVariable Long issueId, @RequestBody IssueUpdateDto updateParam) {
-        return issueService.update(issueId, updateParam);
+    public BaseResponseDto<IssueDetailResponse> updateIssue(@PathVariable Long issueId,
+                                           @RequestPart("data") IssueUpdateDto updateParam,
+                                           @RequestPart(value = "files",required = false) List<MultipartFile> files) throws IOException {
+        return BaseResponseDto.success(ISSUE_UPDATE_SUCCESS, issueService.update(issueId, updateParam, files));
     }
 
+    @DeleteMapping("/{issueId}")
+    public BaseResponseDto<String> deleteIssue(@PathVariable Long issueId) {
+        issueService.deleteIssue(issueId);
+        return BaseResponseDto.success(ISSUE_DELETE_SUCCESS.getMessage(), null);
+    }
 
 }

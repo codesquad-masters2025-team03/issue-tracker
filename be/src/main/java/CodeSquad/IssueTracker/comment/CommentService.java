@@ -3,25 +3,24 @@ package CodeSquad.IssueTracker.comment;
 import CodeSquad.IssueTracker.comment.dto.CommentRequestDto;
 import CodeSquad.IssueTracker.comment.dto.CommentResponseDto;
 import CodeSquad.IssueTracker.comment.dto.CommentUpdateDto;
-import CodeSquad.IssueTracker.global.exception.UserNotFoundException;
+import CodeSquad.IssueTracker.global.exception.NotFoundException;
 import CodeSquad.IssueTracker.user.User;
-import CodeSquad.IssueTracker.user.UserRepository;
+import CodeSquad.IssueTracker.user.UserService;
 import CodeSquad.IssueTracker.util.Uploader;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final Uploader s3Uploader;
 
     public CommentResponseDto createComment(CommentRequestDto dto, List<MultipartFile> files,Long authorId) throws IOException {
@@ -35,8 +34,8 @@ public class CommentService {
 
         commentRepository.save(comment);
 
-        Optional<User> author = userRepository.findById(authorId);
-        return new CommentResponseDto(comment,author.get()); //이중으로 null 체크를 해야할까?
+        User author = userService.findById(authorId);
+        return new CommentResponseDto(comment,author); //이중으로 null 체크를 해야할까?
     }
 
     public Iterable<Comment> findAll() {
@@ -48,11 +47,12 @@ public class CommentService {
     }
 
     public Comment findById(Long id) {
-        return commentRepository.findById(id).orElse(null);
+        return commentRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 댓글항목입니다"));
     }
 
     public CommentResponseDto update(Long commentId, CommentUpdateDto dto,  List<MultipartFile> files,Long requesterId) throws IOException {
-        Comment comment = commentRepository.findById(commentId).get(); //To do 이중으로 null 체크를 해야할까?
+        Comment comment = findById(commentId);
 
         if(files != null && !files.isEmpty()){
             MultipartFile file = files.getFirst();
@@ -61,7 +61,7 @@ public class CommentService {
         }
 
         comment.update(dto.getContent(), requesterId );
-        return new CommentResponseDto(comment,userRepository.findById(requesterId).get());
+        return new CommentResponseDto(comment,userService.findById(requesterId));
     }
 
     public List<Comment> findByIssueId(Long issueId) {
@@ -73,12 +73,15 @@ public class CommentService {
 
         return comments.stream()
                 .map(comment -> {
-                    User author = userRepository.findById(comment.getAuthorId())
-                            .orElseThrow(UserNotFoundException::new);
+                    User author = userService.findById(comment.getAuthorId());
                     return new CommentResponseDto(comment, author);
                 })
                 .toList();
     }
 
+    @Transactional
+    public void  deleteAllByIssueId(Long issueId) {
+        commentRepository.deleteByIssueId(issueId);
+    }
 
 }

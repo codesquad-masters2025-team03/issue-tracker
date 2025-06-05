@@ -4,34 +4,13 @@ import { immer } from 'zustand/middleware/immer';
 const useLabelStore = create(
   immer((set) => ({
     labels: [],
+    count: null,
 
-    setLabels: (labels) =>
+    setLabels: (labels, count = null) =>
       set((state) => {
         state.labels = labels;
+        state.count = count ? count : 0;
       }),
-
-    // 나중에 보완하기. 커스텀 훅의 fetchFn 함수 받아서 사용하기, 커스텀훅의 response받아서 사용하기
-    //일단 이 메서드 쓰지마라.
-    fetchLabels: async (fetchFn, state) => {
-      set((state) => {
-        state.isLoading = true;
-        state.error = null;
-      });
-      try {
-        const res = await fetch('/api/labels');
-        if (!res.ok) throw new Error('Failed to fetch labels');
-        const data = await res.json();
-        set((state) => {
-          state.labels = data;
-          state.isLoading = false;
-        });
-      } catch (err) {
-        set((state) => {
-          state.error = err.message;
-          state.isLoading = false;
-        });
-      }
-    },
 
     addLabel: (label) =>
       set((state) => {

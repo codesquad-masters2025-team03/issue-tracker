@@ -7,9 +7,10 @@ import useIssueDetailStore from '@/stores/IssueDetailStore';
 import { shallow } from 'zustand/shallow';
 import CommentDisplayArea from '@/base-ui/IssuePage/CommentDisplayArea';
 import useValidation from '@/hooks/useValidation';
+import getFormData from '@/utils/common/getFormData';
 
 // 하단 부의 새로운 코멘트 입력은 제외한 컴포넌트 -> 새로운 코멘트는 다른 유닛 컴포넌트에서 다루기!
-export default function DisplayComment({ commentObj, commentPatchHandler }) {
+export default function DisplayComment({ isMainComment, commentObj, commentPatchHandler }) {
   const {
     commentId,
     content,
@@ -20,18 +21,24 @@ export default function DisplayComment({ commentObj, commentPatchHandler }) {
     authorId,
   } = commentObj;
   const [isEdit, setIsEdit] = useState(false);
-  const startEditComment = useIssueDetailStore((s) => s.startEditComment);
-  const updateEditComment = useIssueDetailStore((s) => s.updateEditComment);
+
+  // prop 으로 입력 받는 isMainComment에 따라서 스토어에서 구독하는 액션 핸들러가 달라진다.
+  const startEditComment = useIssueDetailStore((s) =>
+    isMainComment ? s.startEditMainComment : s.startEditComment,
+  );
+  const updateEditComment = useIssueDetailStore((s) =>
+    isMainComment ? s.updateEditMainComment : s.updateEditComment,
+  );
   const { isValid, setCurrentInput } = useValidation({ existedString: content });
 
   function editTriggerHandler() {
     //디테일 이슈 스토어의 comments에서 comment 로 상태 초기화. -> 편집모드에서 해당 상태를 구독해서 보여줘야한다.
-    startEditComment(commentId);
+    isMainComment ? startEditComment() : startEditComment(commentId);
     setIsEdit(true);
   }
 
   function commentValueHandler(value) {
-    updateEditComment(commentId, value);
+    isMainComment ? updateEditComment(value) : updateEditComment(commentId, value);
     setCurrentInput(value);
   }
 
@@ -48,15 +55,24 @@ export default function DisplayComment({ commentObj, commentPatchHandler }) {
   );
 -> ❗️shallow 를 쓰는데 계속 무한루프 발생❗️
   */
-  const editingContent = useIssueDetailStore((s) => s.commentsEditing[commentId]?.content || '');
-  const editingIssueFileUrl = useIssueDetailStore(
-    (s) => s.commentsEditing[commentId]?.issueFileUrl || null,
+  const editingContent = useIssueDetailStore((s) =>
+    isMainComment
+      ? s.mainCommentEditting?.content || ''
+      : s.commentsEditing[commentId]?.content || '',
+  );
+  const editingIssueFileUrl = useIssueDetailStore((s) =>
+    isMainComment
+      ? s.mainCommentEditting?.issueFileUrl || null
+      : s.commentsEditing[commentId]?.issueFileUrl || null,
   );
 
   //   '디테일 이슈의 코멘트의 파일 상태를 변경시키는 액션구독'
-  const setFile = useIssueDetailStore((s) => s.setFileForEditComment);
+  const setFile = useIssueDetailStore((s) =>
+    isMainComment ? s.setFileForEdittingMainComment : s.setFileForEditComment,
+  );
+
   function commentFileHandler(file) {
-    setFile(commentId, file);
+    isMainComment ? setFile(file) : setFile(commentId, file);
   }
 
   function cancleEditHandler() {
@@ -67,12 +83,14 @@ export default function DisplayComment({ commentObj, commentPatchHandler }) {
   function completeEditHandler() {
     const PATCHoptions = {
       method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ content: editingContent, issueFileUrl: editingIssueFileUrl }),
+      body: getFormData({ content: editingContent }, editingIssueFileUrl),
     };
-    commentPatchHandler('PATCH', commentId, PATCHoptions);
+    const accessToken = localStorage.getItem('token');
+    if (isMainComment) {
+      commentPatchHandler('PATCH', PATCHoptions, accessToken);
+    } else {
+      commentPatchHandler('PATCH', commentId, PATCHoptions, accessToken);
+    }
     setIsEdit(false);
   }
 

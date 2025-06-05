@@ -30,4 +30,14 @@ public class IssueLabelService {
     public List<IssueLabelResponse> findIssueLabelResponsesByIssueId(Long issueId) {
         return issueLabelRepository.returnedIssueLabelResponsesByIssueId(issueId);
     }
+
+    @Transactional
+    public void unassignLabel(Long issueId) {
+        issueLabelRepository.deleteByIssueId(issueId);
+    }
+
+    @Transactional
+    public void deleteByLabelId(Long labelId) {
+        issueLabelRepository.deleteByLabelId(labelId);
+    }
 }

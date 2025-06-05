@@ -24,11 +24,11 @@ export default function KanbanMain() {
         return (
           <React.Fragment key={idx}>
             <IssueItem issue={issue} />
-            {arr.length - 1 !== idx && <Devider />}
+            {arr?.length - 1 !== idx && <Devider />}
           </React.Fragment>
         );
       })}
-      {issues.length === 0 && <EmptyItem />}
+      {issues?.length === 0 && <EmptyItem />}
     </Container>
   );
 }

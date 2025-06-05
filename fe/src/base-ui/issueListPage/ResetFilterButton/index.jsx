@@ -19,13 +19,12 @@ const TriggerButton = styled.button`
 `;
 export default function ResetFilterButton() {
   const resetFilters = useFilterStore((state) => state.resetFilters);
-  const selectedFilters = useFilterStore((state) => state.selectedFilters);
   const applyQueryParams = useApplyQueryParams();
   const buttonLabel = '현재의 검색 필터 초기화';
 
   function resetHandler() {
     resetFilters();
-    applyQueryParams(selectedFilters);
+    applyQueryParams({ isOpen: 'true', page: '1' });
   }
   return (
     <TriggerButton onClick={resetHandler}>

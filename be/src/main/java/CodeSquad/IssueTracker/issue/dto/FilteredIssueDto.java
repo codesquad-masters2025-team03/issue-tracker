@@ -3,14 +3,12 @@ package CodeSquad.IssueTracker.issue.dto;
 import CodeSquad.IssueTracker.issueLabel.dto.SummaryLabelDto;
 import CodeSquad.IssueTracker.milestone.dto.SummaryMilestoneDto;
 import CodeSquad.IssueTracker.user.dto.SummaryUserDto;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class FilteredIssueDto {
     private Long issueId;
     private String title;

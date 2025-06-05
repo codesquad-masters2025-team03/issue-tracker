@@ -46,6 +46,16 @@ const ghostButtonStyle = css`
     }
   }
 
+  &.active {
+    color: ${({ theme }) => theme.text.strong};
+    ${typography.selected.bold16}
+    svg {
+      path {
+        stroke: ${({ theme }) => theme.text.strong};
+      }
+    }
+  }
+
   svg path {
     stroke: ${({ theme }) => theme.text.default};
     transition: stroke 0.2s ease;
@@ -57,7 +67,7 @@ const ghostButtonStyle = css`
   }
   &:active {
     border-radius: 12px;
-    background-color: ${({ theme }) => theme.brand.surface.default};
+    background-color: ${({ theme }) => theme.surface.bold};
   }
 `;
 

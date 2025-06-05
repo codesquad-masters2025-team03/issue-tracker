@@ -15,13 +15,15 @@ import AuthorInform from '@/base-ui/utils/AuthorInform';
 import useIssueDetailStore from '@/stores/IssueDetailStore';
 import { IssueTitleInput } from '@/base-ui/IssuePage/IssueTitleInput';
 import useValidation from '@/hooks/useValidation';
+import getFormData from '@/utils/common/getFormData';
 
 export default function DetailIssueHeader({ issueFetchHandler }) {
   const [isEdit, setIsEdit] = useState(false);
   const issue = useIssueDetailStore((s) => s.issue);
   const [editTitle, setEditTitle] = useState(issue.title);
-  const commentCount = useIssueDetailStore((s) => s.comments).length;
+  const commentCount = useIssueDetailStore((s) => s.comments)?.length;
   const { isValid, setCurrentInput } = useValidation({ existedString: issue.title });
+  const accessToken = localStorage.getItem('token');
 
   function getTitleComponent() {
     if (isEdit) {
@@ -63,16 +65,13 @@ export default function DetailIssueHeader({ issueFetchHandler }) {
     if (isEdit) {
       const PATCHoptions = {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ title: editTitle }),
+        body: getFormData({ title: editTitle }),
       };
 
       return (
         <CompleteEditBtn
           onClick={() => {
-            issueFetchHandler('PATCH', PATCHoptions);
+            issueFetchHandler('PATCH', PATCHoptions, accessToken);
             setIsEdit(false);
           }}
           isValid={isValid}
@@ -82,16 +81,13 @@ export default function DetailIssueHeader({ issueFetchHandler }) {
       function getPATCHoptions(isOpen) {
         return {
           method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ isOpen }),
+          body: getFormData({ isOpen }),
         };
       }
       return issue.isOpen ? (
-        <CloseIssueBtn onClick={() => issueFetchHandler('PATCH', getPATCHoptions(false))} />
+        <CloseIssueBtn onClick={() => issueFetchHandler('PATCH', getPATCHoptions(false), accessToken)} />
       ) : (
-        <OpenIssueBtn onClick={() => issueFetchHandler('PATCH', getPATCHoptions(true))} />
+        <OpenIssueBtn onClick={() => issueFetchHandler('PATCH', getPATCHoptions(true), accessToken)} />
       );
     }
   }

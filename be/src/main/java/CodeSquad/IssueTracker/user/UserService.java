@@ -1,5 +1,6 @@
 package CodeSquad.IssueTracker.user;
 
+import CodeSquad.IssueTracker.global.exception.UserNotFoundException;
 import CodeSquad.IssueTracker.user.dto.DetailUserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,12 +17,14 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Optional<User> findByLoginId(String loginId){
-        return userRepository.findByLoginId(loginId);
+    public User findByLoginId(String loginId){
+        return userRepository.findByLoginId(loginId)
+                .orElseThrow(UserNotFoundException::new);
     }
 
-    public Optional<User> findById(Long id){
-        return userRepository.findById(id);
+    public User findById(Long id){
+        return userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
     }
 
     public Iterable<User> findAll(){

@@ -2,9 +2,9 @@ import { typography } from '@/styles/foundation';
 import styled from 'styled-components';
 import { GhostButton } from '../components/Button';
 
-export function PrevButton({ onClick }) {
+export function PrevButton({ onClick, disabled }) {
   return (
-    <GhostButton onClick={onClick}>
+    <GhostButton disabled={disabled} onClick={onClick}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         height="24px"
@@ -18,9 +18,9 @@ export function PrevButton({ onClick }) {
     </GhostButton>
   );
 }
-export function NextButton({ onClick }) {
+export function NextButton({ onClick, disabled }) {
   return (
-    <GhostButton onClick={onClick}>
+    <GhostButton disabled={disabled} onClick={onClick}>
       <span>Next</span>
       <svg
         xmlns="http://www.w3.org/2000/svg"

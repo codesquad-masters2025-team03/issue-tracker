@@ -12,7 +12,8 @@ const ProgressBar = styled.div`
   transform-origin: left;
   background-color: ${({ theme }) => theme.brand.surface.default};
   width: 100%;
-  transform: scaleX(${({ $ratio }) => $ratio});
+  height: 100%;
+  transform: ${({ $ratio }) => `scaleX(${$ratio})`};
 `;
 
 export default function MilestoneProgressBar({ percent }) {

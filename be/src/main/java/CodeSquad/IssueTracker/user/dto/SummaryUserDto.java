@@ -12,4 +12,5 @@ import lombok.Setter;
 public class SummaryUserDto {
     private Long id;
     private String nickName;
+    private String profileImageUrl;
 }

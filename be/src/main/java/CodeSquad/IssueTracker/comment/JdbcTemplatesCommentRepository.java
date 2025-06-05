@@ -73,6 +73,13 @@ public class JdbcTemplatesCommentRepository implements CommentRepository {
         return template.query(sql, param, commentRowMapper());
     }
 
+    @Override
+    public void deleteByIssueId(Long issueId) {
+        String sql = "DELETE FROM comments WHERE issue_id = :issueId";
+        Map<String, Object> param = Map.of("issueId", issueId);
+        template.update(sql, param);
+    }
+
     private RowMapper<Comment> commentRowMapper(){
         return BeanPropertyRowMapper.newInstance(Comment.class);
     }

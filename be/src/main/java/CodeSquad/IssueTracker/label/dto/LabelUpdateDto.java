@@ -10,12 +10,10 @@ public class LabelUpdateDto {
     private String name;
     private String description;
     private String color;
-    private LocalDateTime createdAt;
 
-    public LabelUpdateDto(String name, String description, String color, LocalDateTime createdAt) {
+    public LabelUpdateDto(String name, String description, String color) {
         this.name = name;
         this.description = description;
         this.color = color;
-        this.createdAt = createdAt;
     }
 }

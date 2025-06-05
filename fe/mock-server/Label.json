@@ -1,0 +1,93 @@
+{
+  "endpoints": [
+    {
+      "name": "Get All Labels",
+      "method": "GET",
+      "url": "http://localhost:8080/labels",
+      "request": null,
+      "response": {
+        "success": true,
+        "message": "성공메세지",
+        "data": {
+          "labels": [
+            {
+              "name": "bug",
+              "description": "bug 관련 이슈입니다.",
+              "color": "#FF0000",
+              "id": 1
+            },
+            {
+              "name": "feature",
+              "description": "feature 관련 이슈입니다.",
+              "color": "#00FF00",
+              "id": 2
+            },
+            {
+              "name": "refactor",
+              "description": "refactor 관련 이슈입니다.",
+              "color": "#0000FF",
+              "id": 3
+            },
+            {
+              "name": "performance",
+              "description": "performance 관련 이슈입니다.",
+              "color": "#FF9900",
+              "id": 4
+            },
+            {
+              "name": "security",
+              "description": "security 관련 이슈입니다.",
+              "color": "#33CCCC",
+              "id": 5
+            }
+          ],
+          "count": 5
+        }
+      }
+    },
+    {
+      "name": "Create Label",
+      "method": "POST",
+      "url": "http://localhost:8080/labels",
+      "request": {
+        "name": "bug",
+        "description": "버그 관련 이슈입니다.",
+        "color": "#FF0000"
+      },
+      "response": {
+        "success": true,
+        "message": "성공적으로 생성되었습니다.",
+        "data": {
+          "label": {
+            "name": "bug",
+            "description": "버그 관련 이슈입니다.",
+            "color": "#FF0000",
+            "id": 6
+          }
+        }
+      }
+    },
+    {
+      "name": "Update Label",
+      "method": "PATCH",
+      "url": "http://localhost:8080/labels/{id}",
+      "request": {
+        "name": "enhancement",
+        "description": "기능 개선 관련",
+        "color": "#00FF00"
+      },
+      "response": {
+        "success": true,
+        "message": "성공적으로 수정되었습니다.",
+        "data": {
+          "label": {
+            "name": "enhancement",
+            "description": "기능 개선 관련",
+            "color": "#00FF00",
+            "id": 6
+          }
+        }
+      }
+    }
+  ]
+}

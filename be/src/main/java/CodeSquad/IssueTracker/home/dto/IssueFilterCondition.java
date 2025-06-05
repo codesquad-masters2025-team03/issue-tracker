@@ -1,12 +1,10 @@
 package CodeSquad.IssueTracker.home.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class IssueFilterCondition {
-    private Boolean isOpen;
+    private Boolean isOpen = true;
     private Long label;
     private Long assignee;
     private Long author;

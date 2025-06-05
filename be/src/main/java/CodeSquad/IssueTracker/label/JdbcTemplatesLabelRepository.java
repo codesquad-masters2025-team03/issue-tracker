@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +59,7 @@ public class JdbcTemplatesLabelRepository implements LabelRepository {
                 .addValue("name", updateDto.getName())
                 .addValue("description", updateDto.getDescription())
                 .addValue("color", updateDto.getColor())
-                .addValue("created_at", updateDto.getCreatedAt())
+                .addValue("created_at", LocalDateTime.now())
                 .addValue("label_id", labelId);
         template.update(sql, param);
     }

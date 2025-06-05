@@ -17,7 +17,7 @@
     "assignees": [
       {
         "id": 2,
-        "nickname": "홍길동",
+        "nickName": "홍길동",
         "profileImageUrl": "https://dummy.local/profile/user1.png"
       }
     ],

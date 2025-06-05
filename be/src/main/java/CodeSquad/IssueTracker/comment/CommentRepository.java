@@ -12,4 +12,5 @@ public interface CommentRepository {
     void deleteById(Long commentId);
     void update(Long commentId, CommentUpdateDto updateDto);
     List<Comment> findByIssueId(Long issueId);
+    void deleteByIssueId(Long issueId);
 }

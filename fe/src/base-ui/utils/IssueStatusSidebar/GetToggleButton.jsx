@@ -65,9 +65,9 @@ export function GetToggleButton({ toggleType, item, onClick, isSelected }) {
     default:
       return (
         <SubMenuButton id={item.id} $isSelect={isSelected} onClick={() => onClick(item)}>
-          <img src={item.profileImageUrl} alt={item.nickname} />
+          <img src={item.profileImageUrl} alt={item.nickName} />
 
-          <span>{item.nickname}</span>
+          <span>{item.nickName}</span>
         </SubMenuButton>
       );
   }

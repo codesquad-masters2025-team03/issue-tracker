@@ -35,6 +35,8 @@ const useIssueDetailStore = create(
       lastModifiedAt: '',
     },
 
+    mainCommentEditting: {},
+
     //입력 액션이 발생하면 계속해서 변하는 필드
     comments: [],
     // comment: { commentId: null, content: '', issueFileUrl: [] },
@@ -163,6 +165,25 @@ const useIssueDetailStore = create(
         delete state.commentsEditing[commentId];
       };
     },
+
+    // 메인코멘트 편집 핸들러 액션
+    startEditMainComment: () =>
+      set((state) => {
+        const target = { content: state.issue.content, issueFileUrl: state.issue.issueFileUrl };
+        state.mainCommentEditting = target;
+      }),
+
+    updateEditMainComment: (value) => {
+      set((state) => {
+        state.mainCommentEditting.content = value;
+      });
+    },
+
+    //메인코멘트 편집용 스토어 상태 생각해야함
+    setFileForEdittingMainComment: (file) =>
+      set((state) => {
+        state.mainCommentEditting.issueFileUrl = file ? file : null;
+      }),
 
     // 상세 이슈페이지 GET 패치 후 초기화 로직
     initStore: (data) => {

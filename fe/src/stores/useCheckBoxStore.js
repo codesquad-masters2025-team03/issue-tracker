@@ -25,8 +25,8 @@ const useCheckBoxStore = create(
     setEntry: (issues) =>
       set((state) => {
         state.checkBoxEntry = {};
-        issues.forEach(({ id }) => {
-          state.checkBoxEntry[id] = false;
+        issues.forEach(({ issueId }) => {
+          state.checkBoxEntry[issueId] = false;
         });
       }),
   })),

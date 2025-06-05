@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev
 
 jobs:
   deploy:
@@ -49,6 +50,10 @@ jobs:
           echo "S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}" >> bundle/.env
           echo "S3_URL_NAME=${{ secrets.S3_URL_NAME }}" >> bundle/.env
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> bundle/.env
+          echo "OAUTH_CLIENT_ID"=${{secrets.OAUTH_CLIENT_ID}} >> bundle/.env
+          echo "OAUTH_CLIENT_SECRET"=${{secrets.OAUTH_CLIENT_SECRET}} >> bundle/.env
+          echo "OAUTH_REDIRECT_URI"=${{secrets.OAUTH_REDIRECT_URI}} >> bundle/.env
+          echo "FRONTEND_API_BASE_URL=${{ secrets.FRONTEND_API_BASE_URL }}" >> bundle/.env
 
           # ✅ 실행 스크립트 복사 (.github/workflows/deploy-scripts 에서)
           cp .github/workflows/deploy-scripts/start.sh bundle/scripts/start.sh

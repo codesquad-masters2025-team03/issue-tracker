@@ -58,7 +58,7 @@ function getMenuItems(filteredObj, userId, menuClickHandler) {
 
 export default function FilterBar() {
   const filteredObj = useQueryObject();
-  const isActive = Object.keys(filteredObj).length > 0;
+  const isActive = Object.keys(filteredObj)?.length > 0;
   const setFilter = useFilterStore((state) => state.setFilter);
   const initFilter = useFilterStore((state) => state.initFilter);
   const userId = useAuthStore((state) => state.loginId);

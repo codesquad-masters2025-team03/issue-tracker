@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import PageHeader from '@/units/PageHeader';
 import { Outlet } from 'react-router-dom';
+import FadeInWrapper from '@/utils/FadeInWrapper';
 
 const Container = styled.div`
   display: flex;
@@ -10,8 +11,10 @@ const Container = styled.div`
 export default function MainLayout() {
   return (
     <Container>
-      <PageHeader />
-      <Outlet />
+      <FadeInWrapper>
+        <PageHeader />
+        <Outlet />
+      </FadeInWrapper>
     </Container>
   );
 }

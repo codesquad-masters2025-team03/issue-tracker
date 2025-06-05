@@ -18,6 +18,7 @@ const LabelWrapper = styled.div`
   border: ${({ $borderColor }) => getBorder($borderColor).default};
   height: 24px;
   padding: 4px 12px;
+  display: flex;
 `;
 
 function generateLabelStyle(hexColor) {

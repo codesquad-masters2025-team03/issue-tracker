@@ -49,7 +49,7 @@ const Bottom = styled.div`
 `;
 
 function countNumber(str) {
-  const number = Array.from(str).length;
+  const number = Array.from(str)?.length;
   return number;
 }
 

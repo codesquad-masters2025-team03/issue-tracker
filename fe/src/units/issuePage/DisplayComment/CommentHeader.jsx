@@ -5,6 +5,8 @@ import { GhostButton } from '@/base-ui/components/Button';
 import useTimeAgo from '@/hooks/useTimeAgo';
 import { radius } from '@/styles/foundation';
 import useIssueDetailStore from '@/stores/IssueDetailStore';
+import { useAuthStore } from '@/stores/authStore';
+import Label from '@/base-ui/utils/Label';
 
 export default function CommentHeader({
   authorNickname,
@@ -15,6 +17,7 @@ export default function CommentHeader({
 }) {
   const gapTime = useTimeAgo(lastModifiedAt);
   const issue = useIssueDetailStore((s) => s.issue);
+  const loginId = useAuthStore((s) => s.loginId);
   return (
     <Container>
       <LeftWrapper>
@@ -24,7 +27,11 @@ export default function CommentHeader({
       </LeftWrapper>
       <RightWrapper>
         {issue.authorId === commentAuthorId && <AuthorLabel />}
-        <EditTriggerBtn onClick={editTriggerHandler} />
+        {loginId === commentAuthorId ? (
+          <EditTriggerBtn onClick={editTriggerHandler} />
+        ) : (
+          <Label color={'#ff5670'} labelTitle={'Edit access denied'} />
+        )}
       </RightWrapper>
     </Container>
   );

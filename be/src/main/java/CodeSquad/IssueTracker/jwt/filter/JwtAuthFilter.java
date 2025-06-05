@@ -33,6 +33,7 @@ public class JwtAuthFilter implements Filter {
         String contextPath = httpRequest.getContextPath();
         String method = httpRequest.getMethod();
 
+
         log.info("[JWT Filter] 💣 진입 | URI=[{}] | Context=[{}] | Method=[{}]", requestURI, contextPath, method);
 
         // ✅ OPTIONS 요청 우회
@@ -89,7 +90,10 @@ public class JwtAuthFilter implements Filter {
                 uri.endsWith(".svg") ||
                 uri.endsWith(".ico") ||
                 uri.startsWith("/assets/") ||
-                uri.startsWith("/static/");
+                uri.startsWith("/static/") ||
+                uri.startsWith("/oauth/callback/github") ||
+                uri.startsWith("/oauth-success");
+
     }
 
     private void writeJsonResponse(HttpServletResponse response, BaseResponseDto dto, HttpStatus status) throws IOException {

@@ -27,6 +27,7 @@ import getOptionWithToken from '@/utils/getOptionWithToken/getOptionWithToken';
 import AuthorInform from '../AuthorInform'; //상세 이슈 페이지에서 사이드바 PATCH요청시 필요
 import GetSelectedElements from './SelectedElements';
 import { issueDetailStoreSelectorMap, toggleSelectorMap } from './storeMannager';
+import getFormData from '@/utils/common/getFormData';
 
 const Overlay = styled.div`
   position: fixed;
@@ -94,7 +95,8 @@ function getFetchBody(toggleType, value) {
       ? value.filter((selected) => selected && selected.id).map((selected) => selected.id)
       : value.id,
   };
-  return JSON.stringify(body);
+  // return JSON.stringify(body); -> 멀티파트로 BE에 PATCH 요청으로 인해 수정!
+  return getFormData(body);
 }
 
 //itemsArr는 객체배열을 받는다/
@@ -143,12 +145,10 @@ export default function AddStatusToggle({
     if (context === 'detail') {
       const PATCHoption = {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: getFetchBody(toggleType, selected),
       };
-      issueFetchHandler('PATCH', PATCHoption);
+      const accessToken = localStorage.getItem('token');
+      issueFetchHandler('PATCH', PATCHoption, accessToken);
     }
   }
   function handleToggle() {
@@ -156,9 +156,9 @@ export default function AddStatusToggle({
   }
 
   const isEmpty = (value) => {
-    if (Array.isArray(value)) return value.length === 0;
-    if (value && typeof value === 'object') return Object.keys(value).length === 0;
-    return true; // null, undefined, '' 등도 “빈 값”으로 취급
+    if (Array.isArray(value)) return value?.length === 0;
+    if (value && typeof value === 'object') return Object.keys(value)?.length === 0;
+    return true; // null, undefined, '' 등도 "빈 값"으로 취급
   };
   return (
     <ToggleContainer>

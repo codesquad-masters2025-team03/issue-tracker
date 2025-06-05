@@ -6,7 +6,7 @@ export default function deepEqualFast(a, b) {
 
   const aKeys = Object.keys(a);
   const bKeys = Object.keys(b);
-  if (aKeys.length !== bKeys.length) return false;
+  if (aKeys?.length !== bKeys?.length) return false;
 
   for (let key of aKeys) {
     if (!b.hasOwnProperty(key)) return false;

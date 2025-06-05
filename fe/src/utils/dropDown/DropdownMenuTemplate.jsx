@@ -84,7 +84,7 @@ export function DropdownMenuTemplate({
                   </div>
                   {item.isSelected ? <CheckedOnCircle /> : <CheckedOffCircle />}
                 </S.Item>
-                {idx < items.length - 1 && <S.Separator />}
+                {idx < items?.length - 1 && <S.Separator />}
               </div>
             ))}
           </S.Menu>

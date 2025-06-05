@@ -18,3 +18,10 @@ spring:
       credentials:
         access-key: dummy
         secret-key: dummy
+
+  github:
+    client-id: dummy
+    client-secret: dummy
+    redirect-uri: http://localhost:8080/oauth/callback/github
+
+  frontendApiBaseUrl: http://localhost:3000

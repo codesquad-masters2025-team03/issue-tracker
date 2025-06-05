@@ -6,12 +6,11 @@ DROP TABLE IF EXISTS labels;
 DROP TABLE IF EXISTS milestones;
 DROP TABLE IF EXISTS users;
 
-
 -- Users
 CREATE TABLE users (
                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
                        login_id VARCHAR(255) NOT NULL,
-                       password VARCHAR(255) NOT NULL,
+                       password VARCHAR(255),
                        nick_name VARCHAR(255) NOT NULL,
                        profile_image_url VARCHAR(512)
 );
@@ -45,7 +44,7 @@ CREATE TABLE issues (
                         milestone_id BIGINT,
                         is_open TINYINT(1) DEFAULT 1,
                         last_modified_at TIMESTAMP,
-                        image_url VARCHAR(512),
+                        issue_file_url VARCHAR(512),  --
                         FOREIGN KEY (author_id) REFERENCES users(id),
                         FOREIGN KEY (milestone_id) REFERENCES milestones(milestone_id)
 );
@@ -77,8 +76,7 @@ CREATE TABLE comments (
                           content TEXT,
                           author_id BIGINT,
                           last_modified_at TIMESTAMP,
-                          image_url VARCHAR(512),
+                          issue_file_url VARCHAR(512),  --
                           FOREIGN KEY (issue_id) REFERENCES issues(issue_id),
                           FOREIGN KEY (author_id) REFERENCES users(id)
 );
-

@@ -6,11 +6,11 @@
       "isOpen": true,
       "author": {
         "id": 101,
-        "nickname": "devchan"
+        "nickName": "devchan"
       },
       "assignees": [
-        { "id": 102, "nickname": "alice" },
-        { "id": 103, "nickname": "bob" }
+        { "id": 102, "nickName": "alice" },
+        { "id": 103, "nickName": "bob" }
       ],
       "labels": [
         { "id": 1, "name": "bug", "color": "#ff0000" },
@@ -25,8 +25,8 @@
     // ...다른 이슈들
   ],
   "users": [
-    { "id": 101, "nickname": "devchan", "email": "devchan@example.com" },
-    { "id": 102, "nickname": "alice", "email": "alice@example.com" }
+    { "id": 101, "nickName": "devchan", "email": "devchan@example.com" },
+    { "id": 102, "nickName": "alice", "email": "alice@example.com" }
     // ...다른 유저들
   ],
   "labels": [

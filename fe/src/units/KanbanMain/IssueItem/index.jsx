@@ -16,6 +16,9 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 16px 54px 16px 32px;
+  &:hover {
+    background-color: ${({ theme }) => theme.surface.bold};
+  }
 `;
 
 const LetfWrapper = styled.div`
@@ -64,7 +67,16 @@ const ClickableTitle = styled.span`
   }
 `;
 export default function IssueItem({ issue }) {
-  const { id, isOpen, title, labels, lastModifiedAt, author, milestone, assignees } = issue;
+  const {
+    issueId: id,
+    isOpen,
+    title,
+    labels,
+    lastModifiedAt,
+    author,
+    milestone,
+    assignees,
+  } = issue;
   const toggleCheckBox = useCheckBoxStore((state) => state.toggleCheckBox);
   const checkBoxEntry = useCheckBoxStore((state) => state.checkBoxEntry);
   const navigate = useNavigate();
@@ -82,14 +94,14 @@ export default function IssueItem({ issue }) {
         <Main>
           <Header>
             <IssueBadge isOpen={isOpen} />
-            <ClickableTitle onClick={() => navigate(`/${id}`)}>
+            <ClickableTitle onClick={() => navigate(`/issue/${id}`)}>
               <IssueTitle title={title} />
             </ClickableTitle>
             <ItemLabels labels={labels} />
           </Header>
           <Information>
             <IssueNumber issueNumber={id} />
-            <AuthorInform lastModifiedAt={lastModifiedAt} author={author.nickname} />
+            <AuthorInform lastModifiedAt={lastModifiedAt} author={author.nickName} />
             <MileStoneTitle mileStoneTitle={milestone?.name} />
           </Information>
         </Main>

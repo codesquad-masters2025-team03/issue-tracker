@@ -8,6 +8,7 @@ import { NEW_ISSUE } from '@/api/newIssue';
 import { useAuthStore } from '@/stores/authStore';
 import getOptionWithToken from '@/utils/getOptionWithToken/getOptionWithToken';
 import { useEffect } from 'react';
+import getFormData from '@/utils/common/getFormData';
 
 const Container = styled.div`
   display: flex;
@@ -37,18 +38,17 @@ export default function NewIssueFooter({ isValid }) {
   const labels = useIssueDetailStore((s) => s.labels);
   const milestone = useIssueDetailStore((s) => s.milestone);
   const navigator = useNavigate();
+
+  const dataObj = {
+    title: issue.title,
+    content: issue.content,
+    assigneeIds: assignees.map((n) => n.id),
+    labelIds: labels.map((n) => n.id),
+    milestoneId: milestone.id,
+  };
   const POSToption = {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      title: issue.title,
-      content: issue.content,
-      assigneeIds: assignees.map((n) => n.id),
-      labelIds: labels.map((n) => n.id),
-      milestoneId: milestone.id,
-    }),
+    body: getFormData(dataObj, issue.issueFileUrl),
   };
 
   function submitHandler() {
@@ -57,7 +57,7 @@ export default function NewIssueFooter({ isValid }) {
 
   useEffect(() => {
     if (!response?.data?.issue?.issueId) return;
-    navigator(`/${response.data.issue.issueId}`);
+    navigator(`/issue/${response.data.issue.issueId}`);
   }, [response]);
   return (
     <Container>

@@ -117,8 +117,8 @@ function getDropdownItem(title, item, selectedFilters, onClick) {
           $isSelect={selectedFilters[title] === item.id}
           onClick={() => onClick(title, item.id)}
         >
-          <img src={item.profileImageUrl} alt={item.nickname} />
-          <span>{item.nickname}</span>
+          <img src={item.profileImageUrl} alt={item.nickName} />
+          <span>{item.nickName}</span>
         </Content>
       );
 
@@ -129,8 +129,8 @@ function getDropdownItem(title, item, selectedFilters, onClick) {
           $isSelect={selectedFilters[title] === item.id}
           onClick={() => onClick(title, item.id)}
         >
-          <img src={item.profileImageUrl} alt={item.nickname} />
-          <span>{item.nickname}</span>
+          <img src={item.profileImageUrl} alt={item.nickName} />
+          <span>{item.nickName}</span>
         </Content>
       );
   }
@@ -155,7 +155,7 @@ export default function ScrollFilterList({ title, itemsArr }) {
         return (
           <React.Fragment key={item.id}>
             {getDropdownItem(title, item, selectedFilters, clickHandler)}
-            {idx !== arr.length - 1 && <Separator />}
+            {idx !== arr?.length - 1 && <Separator />}
           </React.Fragment>
         );
       })}

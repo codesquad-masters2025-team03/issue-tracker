@@ -19,3 +19,10 @@ spring:
       credentials:
         access-key: ${AWS_ACCESS_KEY_ID}
         secret-key: ${AWS_SECRET_ACCESS_KEY}
+
+  github:
+    client-id: ${OAUTH_CLIENT_ID}
+    client-secret: ${OAUTH_CLIENT_SECRET}
+    redirect-uri: ${OAUTH_REDIRECT_URI}
+
+  frontendApiBaseUrl: ${FRONTEND_API_BASE_URL}

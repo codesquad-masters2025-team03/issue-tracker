@@ -4,6 +4,7 @@ import { radius } from '@/styles/foundation';
 import { SmallContainerButton } from '@/base-ui/components/ContainerButtons';
 import { useNavigate } from 'react-router-dom';
 import useIssueDetailStore from '@/stores/IssueDetailStore';
+import useFilterModalStore from '@/stores/detailFilterModalStore';
 
 const Container = styled.div`
   display: flex;
@@ -26,17 +27,19 @@ const ButtonWrapper = styled.div`
 
 export function NavigateTabs() {
   const resetStore = useIssueDetailStore((s) => s.resetStore);
+  const milestoneNumber = useFilterModalStore((s) => s.filterEntry.milestone)?.length;
+  const labelNumber = useFilterModalStore((s) => s.filterEntry.label)?.length;
   const navigate = useNavigate();
   const buttonLabel = '이슈작성';
   return (
     <Container>
       <ButtonWrapper>
-        <LabelButton number={2} />
-        <MilestoneButton number={3} />
+        <LabelButton number={labelNumber} />
+        <MilestoneButton number={milestoneNumber} />
       </ButtonWrapper>
       <NewIssueButton
         onClick={() => {
-          navigate('new');
+          navigate('issue/new');
           resetStore();
         }}
       >

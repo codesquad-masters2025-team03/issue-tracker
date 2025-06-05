@@ -9,10 +9,10 @@ const useFilterModalStore = create(
       isActive: false, // 모달의 열림/닫힘 상태 관리
 
       filterEntry: {
-        author: null, // 담당자 목록 & 작성자 목록
-        label: null,
-        milestone: null,
-        assignee: null,
+        author: [], // 담당자 목록 & 작성자 목록
+        label: [],
+        milestone: [],
+        assignee: [],
       },
       isLoaded: false, // 사이드바가 렌더될 수 있을 만큼 로딩이 끝났는지
       updatedAt: 0, // 캐시 생성 시간
